@@ -15,11 +15,21 @@ app.use(cors({
     allowedHeaders: ['Authorization', 'Content-Type'],
 }))
 
+app.use((req, res, next) => {
+    console.log(`Incoming request from origin: ${req.headers.origin}`);
+    next();
+});
+
+app.options('*', cors());
+
+
+
 // routes
 const bookRoutes = require('./src/books/book.route');
 const orderRoutes = require("./src/orders/order.route")
 const userRoutes =  require("./src/users/user.route")
 const adminRoutes = require("./src/stats/admin.stats")
+
 
 app.use("/api/books", bookRoutes)
 app.use("/api/orders", orderRoutes)
