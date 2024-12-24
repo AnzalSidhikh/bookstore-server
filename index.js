@@ -8,12 +8,19 @@ require('dotenv').config()
 
 // middleware
 app.use(express.json());
+const allowedOrigins = ['https://bookstore-frontend-roan.vercel.app'];
+
+
 app.use(cors({
-    origin: '*',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-    allowedHeaders: ['Authorization', 'Content-Type'],
-}))
+  origin: function(origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,  
+}));
 
 app.use((req, res, next) => {
     console.log(`Incoming request from origin: ${req.headers.origin}`);
